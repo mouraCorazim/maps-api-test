@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+#nav_days {
+  display: flex;
+  flex-direction: row;
+  height: 5vh;
+  width: 100vw;
+}
+.nav_button {
+  border-radius: 5px;
+  background-color: blue;
+  color: white;
+  height: 10px;
+  margin: 2px;
+  width: 10px;
+}
+.map {
+  height: 60vh;
+  position: absolute;
+  right: -100vw;
+  transition: 0.8s;
+  width: 100vw;
+}
+.map[active = deactivated] {
+  right: -100vw;
+}
+.map[active = activated] {
+  right: 0;
+}

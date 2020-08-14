@@ -1,4 +1,4 @@
-function setMap(){
+function changeActiveMap(){
   const activeMap = document.querySelector('div.map[active = activated]');
 
   if(activeMap){
@@ -6,6 +6,33 @@ function setMap(){
   }
 
   document.querySelector('div#day'+ this.texContent).setAttribute('active', 'activated');
+}
+
+function createNavButton(objConstruction){
+  const {content, click, className, parent} = objConstruction;
+  const navButton = document.createElement('div');
+
+  navButton.texContent = content;
+  navButton.onclick = click;
+  navButton.setAttribute('class', className);
+
+  parent.appendChild(navButton);
+
+  return navButton;
+}
+
+function createMap(objConstruction){
+  const {id, parent, position, gmaps, mapZoom, className} = objConstruction;
+  const mapBox = document.createElement('div');
+  const map = new gmaps.Map(mapBox, {zoom: mapZoom, center: position});
+
+  mapBox.setAttribute('id', id);
+  mapBox.setAttribute('class', className);
+  mapBox.setAttribute('active', 'deactived');
+
+  parent.appendChild(mapBox);
+
+  return map;
 }
 
 function initMap() {
@@ -30,52 +57,31 @@ function initMap() {
     },
   ]
 
-  for(let i = 0; i != positions.length; i++){
-    const mapBox = document.createElement('div');
-    const navButton = document.createElement('div');
-    const infowindow = new google.maps.InfoWindow();
-    const map = new google.maps.Map(mapBox, {zoom: 16, center: positions[i].position});
-    const marker = new google.maps.Marker(
-      {
-        position: positions[i].position, 
-        map: map, 
-        title: positions[i].title, 
-        label: positions[i].label
-      }
-    );
+  positions.forEach((elm, ind) => {
 
-    searchRestaurants(positions[i].position, '700', map, servicesMarkers);
+    const map = createMap({
+      id: `day${ind + 1}`,
+      className: 'map',
+      parent: body,
+      position: elm.position,
+      mapZoom: 14,
+      gmaps: google.maps
+    }); // Map creation
 
-    mapBox.setAttribute('id', `day${i + 1}`);
-    mapBox.setAttribute('class', 'map');
-    mapBox.setAttribute('active', 'deactived');
+    const navButton = createNavButton({
+      content: ind + 1, 
+      parent: navDays,
+      className: 'nav_button',
+      click: changeActiveMap
+    }); // Map navigation button creation
 
-    navButton.texContent = i + 1;
-    navButton.onclick = setMap;
-    navButton.setAttribute('class', 'nav_button');
-
-    navDays.appendChild(navButton);
-    body.appendChild(mapBox);
-  }
-}
-
-function searchRestaurants(location, radius, map, callback){
-
-  var request = {
-    location: location,
-    radius: radius,
-    type: ['restaurant']
-  }
-  const service = new google.maps.places.PlacesService(map);
-  service.nearbySearch(request, callback);
-}
-
-function servicesMarkers(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      createMarker(results[i]);
-    }
-  }
+    const marker = new google.maps.Marker({ 
+      position: elm.position, 
+      map: map, 
+      title: elm.title, 
+      label: elm.label
+    }); // Map marker creation
+  })
 }
 
 const thanks = '\033[0;35m[THANKS FROM CLIENT]\033[0;0m:\033[0;34m main.js was linked and working well..';

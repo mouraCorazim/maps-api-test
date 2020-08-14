@@ -2,11 +2,13 @@ global.__root = __dirname;
 
 const rl = require('readline');
 const http = require('http');
-const router = require('./router.js');
-const mapsApis = require('./mapsApi/apis.js')
-const mapsKey = require('./mapsApi/key.js');
-const serverListeners = require('./server/server.js');
-const faceListeners = require('./server/interface.js');
+
+const router = require('./config/router.js'); 
+const serverListeners = require('./config/server.js');
+const faceListeners = require('./config/interface.js');
+
+const { key } = require('./api/maps/key.js');
+const maps = require('./api/maps/gmaps.js');
 
 const face = rl.createInterface({
   input: process.stdin,
@@ -15,7 +17,6 @@ const face = rl.createInterface({
 
 const server = http.createServer(router);
 
-mapsApis.gmaps(mapsKey.key);
-mapsApis.lmaps(mapsKey.key);
+maps(key);
 serverListeners(server);
 faceListeners(face, server);

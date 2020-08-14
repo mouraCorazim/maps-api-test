@@ -1,4 +1,4 @@
-const color = require('../consoleColors.js');
+const color = require('./consoleColors.js');
 
 module.exports = function (server){
 

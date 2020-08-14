@@ -1,4 +1,4 @@
-const controllers = require('./controllers/registered.js');
+const controllers = require('../controllers/register.js');
 
 module.exports = (req, res) => {
 
@@ -14,8 +14,9 @@ module.exports = (req, res) => {
       case '/main/style': controllers.style(req, res); break;
       case '/main/script': controllers.main(req, res); break;
       case '/api/gmaps': controllers.gmaps(req, res); break;
-      case '/api/lamps': controllers.lmaps(req, res); break;
       case '/post/thanks': controllers.bodyParse(req, res); break;
+      case '/favicon.ico': controllers.favicon(req, res); break;
+      default: controllers.forbidden(req, res); break;
     }
   }
   else{

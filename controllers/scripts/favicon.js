@@ -1,7 +1,8 @@
 const fs = require('fs');
 
 module.exports = function (req, res){
-  fs.readFile(__root + '/public/scripts/lmaps.js', (err, data) => {
+
+  fs.readFile(__root + '/public/images/fav.ico', (err, data) => {
       
     if(err){
 
@@ -10,7 +11,7 @@ module.exports = function (req, res){
     }
     else{
 
-      res.writeHead(200, { 'Content-Type': 'text/javascript' });
+      res.writeHead(200, { 'Content-Type': 'text/css' });
       res.write(data);
     }
 
